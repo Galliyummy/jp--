@@ -36,7 +36,7 @@ function isskippable (str: string) {
     return str == ' ' || str == '\n' || str == '\t';
 }
 
-export function tokenizer (sourceCode: string): Token[] {
+export function tokenize (sourceCode: string): Token[] {
     const tokens = new Array<Token>();
     const src = sourceCode.split("");
 
@@ -48,12 +48,12 @@ export function tokenizer (sourceCode: string): Token[] {
             tokens.push(token(src.shift(),TokenType.RParen));
         } else if (src[0] == "=") {
             tokens.push(token(src.shift(),TokenType.Equals));
-        } else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/") {
+        } else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" || src[0] == "%") {
             tokens.push(token(src.shift(),TokenType.BinaryOperator));
         } else {
             //handle multicharacter tokens
             //numbers
-            if(isint(src[0])) {
+            if (isint(src[0])) {
                 let n = "";
                 while (src.length > 0 && isint(src[0])) {
                     n += src.shift();
@@ -84,11 +84,6 @@ export function tokenizer (sourceCode: string): Token[] {
             }
         }
     }
-    tokens.push({type: TokenType:EOF, value: "EndOfFile"});
+    tokens.push({value: "EndOfFile", type: TokenType.EOF});
     return tokens;
-}
-
-const source = await Deno.readTextFile("./test.jp");
-for (const token of tokenizer(source)){
-    console.log(token);
 }
