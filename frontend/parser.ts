@@ -3,10 +3,11 @@ import {
     Program, 
     BinaryExpr, 
     NumericLiteral, 
+    NullLiteral,
     Identifier,
     Expr,
 } from "./ast.ts";
-import {tokenize, Token, TokenType} from "./lexer.ts";
+import { tokenize, Token, TokenType } from "./lexer.ts";
 
 export default class Parser {
     private tokens: Token[] = [];
@@ -28,7 +29,7 @@ export default class Parser {
     private expect (type: TokenType, err: any) {
         const prev = this.tokens.shift() as Token;
         if (!prev || prev.type != type) {
-            console.error("Parser Error:\n", err, prev, "- Expecting: ", type);
+            console.error("Parser Error:\n", err, prev, "- Expecting:", type);
             Deno.exit(1);
         }
         return prev;
@@ -94,24 +95,28 @@ export default class Parser {
                     symbol: this.eat().value,
                 } as Identifier;
 
-                case TokenType.Number:
+            case TokenType.Null: 
+                this.eat();
+                return {kind: "NullLiteral", value: "null"} as NullLiteral;
+
+            case TokenType.Number:
                 return{
                     kind: "NumericLiteral", 
                     value: parseFloat(this.eat().value),
                 } as NumericLiteral;
 
-                case TokenType.LParen: {
-                    this.eat(); //gotta kill the paren
-                    const value = this.parse_expr();
-                    this.expect(
-                        TokenType.RParen,
-                        "Unexpected token found in parentheses, expected closing parenthesis"
-                    ); //kill the closing paren, but also throw an error if there is not one
-                    return value;
+            case TokenType.LParen: {
+                this.eat(); //gotta kill the paren
+                const value = this.parse_expr();
+                this.expect(
+                    TokenType.RParen,
+                    "Unexpected token found in parentheses, expected closing parenthesis."
+                ); //kill the closing paren, but also throw an error if there is not one
+                return value;
                 }
-                default:
-                    console.error("Unexpected token has been found whilst parsing: ", this.at());
-                    Deno.exit(1);
+            default:
+                console.error("Unexpected token has been found whilst parsing:", this.at());
+                Deno.exit(1);
         }
     }
 }
