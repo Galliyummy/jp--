@@ -9,3 +9,7 @@ order of operations
 multiple datatypes
 
 keyword support
+
+binary operations
+
+working interpreter
