@@ -9,8 +9,8 @@ export interface NullVal extends RuntimeVal {
     value: null;
 }
 
-export function MK_NULL () {
-    return { type: "null", value: null } as NullVal
+export function MK_NULL() {
+    return { type: "null", value: null } as NullVal;
 }
 
 export interface NumberVal extends RuntimeVal {
@@ -18,8 +18,8 @@ export interface NumberVal extends RuntimeVal {
     value: number;
 }
 
-export function MK_NUMBER (n = 0) {
-    return { type: "number", value: n } as NumberVal
+export function MK_NUMBER(n = 0) {
+    return { type: "number", value: n } as NumberVal;
 }
 
 export interface BooleanVal extends RuntimeVal {
@@ -27,6 +27,6 @@ export interface BooleanVal extends RuntimeVal {
     value: boolean;
 }
 
-export function MK_BOOL (b = true) {
+export function MK_BOOL(b = true) {
     return { type: "boolean", value: b } as BooleanVal;
 }

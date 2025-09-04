@@ -1,23 +1,18 @@
 import Parser from "./frontend/parser.ts";
 import Environment from "./runtime/environment.ts";
 import { evaluate } from "./runtime/interpreter.ts";
-import { MK_NUMBER, MK_BOOL, MK_NULL } from "./runtime/values.ts";
 
 repl();
 
-function repl () {
+function repl() {
     const parser = new Parser();
     const env = new Environment();
-    env.declareVar("x", MK_NUMBER(100));
-    env.declareVar("fact", MK_BOOL(true));
-    env.declareVar("cap", MK_BOOL(false));
-    env.declareVar("na", MK_NULL());
-    console.log("\nRepl V0.1")
+    console.log("\nRepl V0.1");
 
-    while(true) {
+    while (true) {
         const input = prompt("> ");
         //check for no user or exit keyword
-        if (!input || input.includes ("exit")) {
+        if (!input || input.includes("exit")) {
             Deno.exit(1);
         }
 

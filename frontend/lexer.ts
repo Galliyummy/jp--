@@ -2,54 +2,62 @@ export enum TokenType {
     Number,
     Identifier,
     Equals,
+    Semicolon,
     LParen,
     RParen,
     BinaryOperator,
     Let,
+    Const,
     EOF,
 }
 
 const KEYWORDS: Record<string, TokenType> = {
     let: TokenType.Let,
+    const: TokenType.Const,
 };
 
 export interface Token {
-    type: TokenType,
-    value: string,
+    type: TokenType;
+    value: string;
 }
 
-function token (value = "", type: TokenType): Token {
-    return{value, type};
+function token(value = "", type: TokenType): Token {
+    return { value, type };
 }
 
-function isint (str: string) {
+function isint(str: string) {
     const c = str.charCodeAt(0);
-    const bounds = ['0'.charCodeAt(0), '9'.charCodeAt(0)];
+    const bounds = ["0".charCodeAt(0), "9".charCodeAt(0)];
     return (c >= bounds[0] && c <= bounds[1]);
 }
 
-function isalpha (src: string) {
+function isalpha(src: string) {
     return src.toUpperCase() != src.toLowerCase();
 }
 
-function isskippable (str: string) {
-    return str == ' ' || str == '\n' || str == '\t';
+function isskippable(str: string) {
+    return str == " " || str == "\n" || str == "\t";
 }
 
-export function tokenize (sourceCode: string): Token[] {
+export function tokenize(sourceCode: string): Token[] {
     const tokens = new Array<Token>();
     const src = sourceCode.split("");
 
     //build each token until end of file
-        while (src.length > 0) {
-            if (src[0] == "(") {
-            tokens.push(token(src.shift(),TokenType.LParen));
+    while (src.length > 0) {
+        if (src[0] == "(") {
+            tokens.push(token(src.shift(), TokenType.LParen));
         } else if (src[0] == ")") {
-            tokens.push(token(src.shift(),TokenType.RParen));
+            tokens.push(token(src.shift(), TokenType.RParen));
         } else if (src[0] == "=") {
-            tokens.push(token(src.shift(),TokenType.Equals));
-        } else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" || src[0] == "%") {
-            tokens.push(token(src.shift(),TokenType.BinaryOperator));
+            tokens.push(token(src.shift(), TokenType.Equals));
+        } else if (src[0] == ";") {
+            tokens.push(token(src.shift(), TokenType.Semicolon));
+        } else if (
+            src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" ||
+            src[0] == "%"
+        ) {
+            tokens.push(token(src.shift(), TokenType.BinaryOperator));
         } else {
             //handle multicharacter tokens
             //numbers
@@ -59,8 +67,7 @@ export function tokenize (sourceCode: string): Token[] {
                     n += src.shift();
                 }
                 tokens.push(token(n, TokenType.Number));
-            }
-            //alpha
+            } //alpha
             else if (isalpha(src[0])) {
                 let id = "";
                 while (src.length > 0 && isalpha(src[0])) {
@@ -74,16 +81,17 @@ export function tokenize (sourceCode: string): Token[] {
                 } else {
                     tokens.push(token(id, TokenType.Identifier));
                 }
-            }
-            else if (isskippable(src[0])) {
+            } else if (isskippable(src[0])) {
                 src.shift(); //skip
-            }
-            else {
-                console.log("Unrecognized source character was found: ", src[0]);
+            } else {
+                console.log(
+                    "Unrecognized source character was found: ",
+                    src[0],
+                );
                 Deno.exit(1);
             }
         }
     }
-    tokens.push({value: "EndOfFile", type: TokenType.EOF});
+    tokens.push({ value: "EndOfFile", type: TokenType.EOF });
     return tokens;
 }
