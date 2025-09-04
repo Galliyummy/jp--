@@ -3,7 +3,6 @@ import {
     Program, 
     BinaryExpr, 
     NumericLiteral, 
-    NullLiteral,
     Identifier,
     Expr,
 } from "./ast.ts";
@@ -94,10 +93,6 @@ export default class Parser {
                     kind: "Identifier", 
                     symbol: this.eat().value,
                 } as Identifier;
-
-            case TokenType.Null: 
-                this.eat();
-                return {kind: "NullLiteral", value: "null"} as NullLiteral;
 
             case TokenType.Number:
                 return{
