@@ -19,3 +19,5 @@ variables
 also removed null type from frontend and made it in runtime
 
 added boolean, but no operations yet
+
+can assign values to variables and declare if they are constant or not
