@@ -13,3 +13,9 @@ keyword support
 binary operations
 
 working interpreter
+
+variables
+
+also removed null type from frontend and made it in runtime
+
+added boolean, but no operations yet
