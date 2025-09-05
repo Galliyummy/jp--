@@ -1,3 +1,11 @@
 let x = 5;
 let y = 2;
-8 - 4 * ( 3 + x ) / y
+let z;
+const foo = 10;
+let bar;
+
+z = 8 - 4 * ( 3 + x ) / y
+z
+
+bar = false
+foo = 10
